@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Study Materials Portal</title>
     <style>
         :root {
@@ -431,13 +431,13 @@
 
         .modal-content {
             background-color: #fefefe;
-            margin: 2% auto;
+            margin: 0;
             padding: 20px;
-            border-radius: 12px;
-            width: 95%;
-            max-width: 900px;
+            border-radius: 0;
+            width: 100%;
+            height: 100%;
             position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: none;
         }
 
         .close-btn {
@@ -449,10 +449,18 @@
             color: #aaa;
             cursor: pointer;
             transition: all 0.3s;
+            z-index: 1001;
+            background: rgba(0,0,0,0.5);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
 
         .close-btn:hover {
-            color: #333;
+            color: white;
             transform: rotate(90deg);
         }
 
@@ -591,13 +599,20 @@
             }
             
             .viewer-wrapper {
-                height: 70vh;
+                height: 100vh;
+                border-radius: 0;
+                border: none;
+            }
+            
+            .modal-content {
+                padding: 10px;
             }
             
             .toolbar {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 10px;
+                padding: 10px;
             }
             
             .page-controls {
@@ -605,24 +620,54 @@
                 justify-content: center;
             }
             
-            .modal-content {
-                width: 98%;
-                margin: 10px auto;
-                padding: 15px;
+            .pdf-container {
+                padding: 10px;
             }
             
-            .fab {
-                width: 50px;
-                height: 50px;
-                bottom: 20px;
-                right: 20px;
+            .page-nav {
+                right: 10px;
+                bottom: 10px;
+            }
+            
+            .page-nav button {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
             }
 
             .highlight-tools {
                 top: auto;
-                bottom: 100px;
-                right: 20px;
+                bottom: 80px;
+                right: 10px;
                 flex-direction: row;
+            }
+            
+            .close-btn {
+                right: 10px;
+                top: 10px;
+                width: 30px;
+                height: 30px;
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .toolbar button, .toolbar select {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+            
+            .page-controls input {
+                width: 40px;
+                padding: 4px;
+            }
+            
+            .highlight-tools {
+                bottom: 70px;
+            }
+            
+            .highlight-tools button {
+                padding: 6px;
             }
         }
     </style>
@@ -634,10 +679,10 @@
             <h1><i class="fas fa-book-open"></i> Study Materials Portal</h1>
             <nav>
                 <ul>
-                    <li><a href="#m1">M1</a></li>
-                    <li><a href="#m2">M2</a></li>
-                    <li><a href="#m3">M3</a></li>
-                    <li><a href="#m4">M4</a></li>
+                    <li><a href="#m1">Module 1</a></li>
+                    <li><a href="#m2">Module 2</a></li>
+                    <li><a href="#m3">Module 3</a></li>
+                    <li><a href="#m4">Module 4</a></li>
                 </ul>
             </nav>
         </div>
@@ -871,7 +916,13 @@
             pdfViewerFunctions.closeModal = viewerFunctions.closeModal;
             
             // Set up scroll to top button
-            const scrollToTopBtn = document.getElementById('scrollToTop');
+            const scrollToTopBtn = document.createElement('div');
+            scrollToTopBtn.className = 'fab';
+            scrollToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+            scrollToTopBtn.id = 'scrollToTop';
+            scrollToTopBtn.style.display = 'none';
+            document.body.appendChild(scrollToTopBtn);
+            
             scrollToTopBtn.addEventListener('click', function() {
                 window.scrollTo({
                     top: 0,
@@ -991,6 +1042,15 @@
                 modal.style.display = 'block';
                 document.body.style.overflow = 'hidden';
                 highlightTools.style.display = 'flex';
+                
+                // Adjust zoom level for mobile
+                if (window.innerWidth <= 768) {
+                    zoomLevel = 0.75;
+                    zoomSelect.value = zoomLevel;
+                } else {
+                    zoomLevel = 1;
+                    zoomSelect.value = zoomLevel;
+                }
                 
                 // Initialize PDF viewer with multiple fallback methods
                 initPdfViewer(pdfUrl);
@@ -1393,6 +1453,41 @@
             viewerWrapper.addEventListener('dragstart', function(e) {
                 e.preventDefault();
             });
+            
+            // Handle mobile touch events
+            document.addEventListener('touchstart', function(e) {
+                if (isHighlighting && e.target.closest('.page-container')) {
+                    const touch = e.touches[0];
+                    const mouseEvent = new MouseEvent('mousedown', {
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+                    touch.target.dispatchEvent(mouseEvent);
+                }
+            }, { passive: true });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (isHighlighting && e.target.closest('.page-container')) {
+                    const touch = e.touches[0];
+                    const mouseEvent = new MouseEvent('mousemove', {
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+                    touch.target.dispatchEvent(mouseEvent);
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            document.addEventListener('touchend', function(e) {
+                if (isHighlighting && e.target.closest('.page-container')) {
+                    const touch = e.changedTouches[0];
+                    const mouseEvent = new MouseEvent('mouseup', {
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+                    touch.target.dispatchEvent(mouseEvent);
+                }
+            }, { passive: true });
             
             // Return the functions that need to be accessible globally
             return {
