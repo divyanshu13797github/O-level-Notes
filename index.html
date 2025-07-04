@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Materials Portal</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --danger-color: #e74c3c;
+            --success-color: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #6e48aa, #9d50bb);
+            color: white;
+            padding: 25px 0;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 0px 0PX 100px 100px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        h1 {
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding: 0 10px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+        
+        nav ul li a:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .module-section {
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        
+        .module-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .module-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #6e48aa, #9d50bb);
+            border-radius: 2px;
+        }
+        
+        .category {
+            margin-bottom: 25px;
+        }
+        
+        .category h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .category h3::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 20px;
+            background: linear-gradient(180deg, #6e48aa, #9d50bb);
+            border-radius: 4px;
+        }
+        
+        .cards-container {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 15px 5px;
+            scrollbar-width: thin;
+            scrollbar-color: #9d50bb #f1f1f1;
+        }
+        
+        .cards-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .cards-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .cards-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #6e48aa, #9d50bb);
+            border-radius: 10px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            flex: 0 0 250px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .card-img {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 50px;
+            background: linear-gradient(135deg, #6e48aa, #9d50bb);
+        }
+        
+        .card-body {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        
+        .card-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .view-btn {
+            padding: 6px 15px;
+            background: linear-gradient(135deg, #6e48aa, #9d50bb);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(110, 72, 170, 0.3);
+        }
+        
+        /* Module-specific gradient colors */
+        #m1 .card-img {
+            background: linear-gradient(135deg, #6e48aa, #9d50bb);
+        }
+        #m1 .view-btn {
+            background: linear-gradient(135deg, #6e48aa, #9d50bb);
+        }
+        
+        #m2 .card-img {
+            background: linear-gradient(135deg, #47e66f, #dae954);
+        }
+        #m2 .view-btn {
+            background: linear-gradient(135deg, #47e664, #d5e954);
+        }
+        
+        #m3 .card-img {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+        }
+        #m3 .view-btn {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+        }
+        
+        #m4 .card-img {
+            background: linear-gradient(135deg, #f857a6, #ff5858);
+        }
+        #m4 .view-btn {
+            background: linear-gradient(135deg, #f857a6, #ff5858);
+        }
+        
+        /* Enhanced PDF Viewer Styles */
+        .viewer-wrapper {
+            position: relative;
+            width: 100%;
+            height: 80vh;
+            border: 1px solid #ddd;
+            background-color: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .pdf-container {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+            padding: 20px;
+        }
+        
+        .page-container {
+            margin: 0 auto 30px;
+            position: relative;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        
+        .pdf-page {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+        
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            border-radius: 8px 8px 0 0;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .toolbar-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .toolbar button, .toolbar select {
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #6e48aa, #9d50bb);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .toolbar button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .toolbar button:active {
+            transform: translateY(0);
+        }
+        
+        .toolbar select {
+            background: white;
+            color: #333;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+        }
+        
+        .toolbar .disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .page-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .page-controls input {
+            width: 50px;
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-size: 1.2rem;
+            color: #555;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #6e48aa;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .page-nav {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .page-nav button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6e48aa, #9d50bb);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            font-size: 20px;
+        }
+        
+        .page-nav button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        
+        .page-nav button:active {
+            transform: translateY(0);
+        }
+        
+        .disable-selection {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 2% auto;
+            padding: 20px;
+            border-radius: 12px;
+            width: 95%;
+            max-width: 900px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #333;
+            transform: rotate(90deg);
+        }
+
+        /* Footer styles */
+        footer {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            text-align: center;
+            padding: 25px 0;
+            margin-top: 40px;
+            border-radius: 12px;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Floating action button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6e48aa, #9d50bb);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 15px rgba(110, 72, 170, 0.4);
+            cursor: pointer;
+            z-index: 99;
+            transition: all 0.3s;
+        }
+        
+        .fab:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(110, 72, 170, 0.5);
+        }
+        
+        .fab i {
+            font-size: 24px;
+        }
+
+        /* Highlighting tools */
+        .highlight-tools {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 10px;
+            z-index: 101;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .highlight-tools button {
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .highlight-tools button:hover {
+            transform: scale(1.1);
+        }
+
+        .highlight-tools button.active {
+            box-shadow: 0 0 0 2px #6e48aa;
+        }
+
+        .highlight {
+            position: absolute;
+            background-color: rgba(255, 255, 0, 0.4);
+            z-index: 10;
+        }
+
+        .marker-yellow {
+            background-color: rgba(255, 255, 0, 0.4);
+        }
+
+        .marker-green {
+            background-color: rgba(0, 255, 0, 0.4);
+        }
+
+        .marker-pink {
+            background-color: rgba(255, 0, 255, 0.4);
+        }
+
+        .marker-blue {
+            background-color: rgba(0, 0, 255, 0.4);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                padding: 10px;
+            }
+            
+            header {
+                padding: 20px 0;
+                border-radius: 0;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            nav ul {
+                gap: 8px;
+            }
+            
+            nav ul li a {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .module-section {
+                padding: 15px;
+                border-radius: 0;
+                margin-bottom: 20px;
+            }
+            
+            .card {
+                flex: 0 0 220px;
+            }
+            
+            .card-img {
+                height: 120px;
+            }
+            
+            .viewer-wrapper {
+                height: 70vh;
+            }
+            
+            .toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .page-controls {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .modal-content {
+                width: 98%;
+                margin: 10px auto;
+                padding: 15px;
+            }
+            
+            .fab {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .highlight-tools {
+                top: auto;
+                bottom: 100px;
+                right: 20px;
+                flex-direction: row;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-book-open"></i> Study Materials Portal</h1>
+            <nav>
+                <ul>
+                    <li><a href="#m1">Module 1</a></li>
+                    <li><a href="#m2">Module 2</a></li>
+                    <li><a href="#m3">Module 3</a></li>
+                    <li><a href="#m4">Module 4</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Module Sections -->
+        <section id="m1" class="module-section">
+            <h2>Module 1 Materials</h2>
+            <div class="category">
+                <h3><i class="fas fa-file-alt"></i> Notes</h3>
+                <div class="cards-container" id="m1-notes">
+                    <!-- Cards will be added by JavaScript -->
+                </div>
+            </div>
+            <div class="category">
+                <h3><i class="fas fa-question-circle"></i> Previous Year Questions</h3>
+                <div class="cards-container" id="m1-questions">
+                    <!-- Cards will be added by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <section id="m2" class="module-section">
+            <h2>Module 2 Materials</h2>
+            <div class="category">
+                <h3><i class="fas fa-file-alt"></i> Notes</h3>
+                <div class="cards-container" id="m2-notes">
+                    <!-- Cards will be added by JavaScript -->
+                </div>
+            </div>
+            <div class="category">
+                <h3><i class="fas fa-question-circle"></i> Previous Year Questions</h3>
+                <div class="cards-container" id="m2-questions">
+                    <!-- Cards will be added by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <section id="m3" class="module-section">
+            <h2>Module 3 Materials</h2>
+            <div class="category">
+                <h3><i class="fas fa-file-alt"></i> Notes</h3>
+                <div class="cards-container" id="m3-notes">
+                    <!-- Cards will be added by JavaScript -->
+                </div>
+            </div>
+            <div class="category">
+                <h3><i class="fas fa-question-circle"></i> Previous Year Questions</h3>
+                <div class="cards-container" id="m3-questions">
+                    <!-- Cards will be added by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <section id="m4" class="module-section">
+            <h2>Module 4 Materials</h2>
+            <div class="category">
+                <h3><i class="fas fa-file-alt"></i> Notes</h3>
+                <div class="cards-container" id="m4-notes">
+                    <!-- Cards will be added by JavaScript -->
+                </div>
+            </div>
+            <div class="category">
+                <h3><i class="fas fa-question-circle"></i> Previous Year Questions</h3>
+                <div class="cards-container" id="m4-questions">
+                    <!-- Cards will be added by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PDF Viewer Modal -->
+    <div id="pdfModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h2 id="pdfTitle">PDF Viewer</h2>
+            
+            <div class="viewer-wrapper disable-selection" id="viewer-wrapper">
+                <div class="toolbar">
+                    <div class="toolbar-group">
+                        <button id="prev-page" title="Previous page"><i class="fas fa-arrow-left"></i></button>
+                        <button id="next-page" title="Next page"><i class="fas fa-arrow-right"></i></button>
+                        <div class="page-controls">
+                            <span id="page-count">Page 1 of 1</span>
+                            <input type="number" id="page-input" min="1" value="1">
+                            <button id="go-to-page">Go</button>
+                        </div>
+                    </div>
+                    
+                    <div class="toolbar-group">
+                        <select id="zoom-select">
+                            <option value="0.5">50%</option>
+                            <option value="0.75">75%</option>
+                            <option value="1" selected>100%</option>
+                            <option value="1.25">125%</option>
+                            <option value="1.5">150%</option>
+                            <option value="2">200%</option>
+                        </select>
+                        
+                        <button id="download-btn" title="Download PDF"><i class="fas fa-download"></i></button>
+                    </div>
+                </div>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Loading document...</p>
+                </div>
+                <div class="pdf-container" id="pdf-container"></div>
+            </div>
+            
+            <div class="page-nav">
+                <button id="scroll-up" title="Scroll up"><i class="fas fa-arrow-up"></i></button>
+                <button id="scroll-down" title="Scroll down"><i class="fas fa-arrow-down"></i></button>
+            </div>
+
+            <!-- Highlighting Tools -->
+            <div class="highlight-tools" id="highlight-tools" style="display: none;">
+                <button id="highlight-btn" title="Highlight text" class="active">
+                    <i class="fas fa-highlighter"></i>
+                </button>
+                <button id="yellow-marker" title="Yellow highlighter" class="marker-yellow">
+                    <i class="fas fa-highlighter" style="color: yellow"></i>
+                </button>
+                <button id="green-marker" title="Green highlighter" class="marker-green">
+                    <i class="fas fa-highlighter" style="color: limegreen"></i>
+                </button>
+                <button id="pink-marker" title="Pink highlighter" class="marker-pink">
+                    <i class="fas fa-highlighter" style="color: hotpink"></i>
+                </button>
+                <button id="blue-marker" title="Blue highlighter" class="marker-blue">
+                    <i class="fas fa-highlighter" style="color: dodgerblue"></i>
+                </button>
+                <button id="clear-highlights" title="Clear all highlights">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script>
+        // Set the worker path for PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+
+        // PDF data with your PDF link and sample data
+        const pdfData = {
+            m1: {
+                notes: [
+                    { title: "AngularJS PDF", desc: "AngularJS study material", pdf: "https://raw.githubusercontent.com/divyanshu13797github/test/c68a1c47a1174e0cc32fc32e13e10d15963e23e8/AngularJS%20PDF.pdf" },
+                    { title: "Note 2", desc: "Detailed explanation of key topics", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Note 3", desc: "Important formulas collection", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Note 4", desc: "Real-world use cases", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Note 5", desc: "Quick revision material", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
+                ],
+                questions: [
+                    { title: "2018 Question Paper", desc: "Full question paper with solutions", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "2019 Question Paper", desc: "Full question paper with solutions", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "2020 Question Paper", desc: "Full question paper with solutions", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Important Questions", desc: "Most frequently asked questions", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Model Paper", desc: "Practice question paper", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
+                ]
+            },
+            m2: {
+                notes: [
+                    { title: "Module 2 Note 1", desc: "Basic concepts and overview", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Module 2 Note 2", desc: "Detailed explanation", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Module 2 Note 3", desc: "Important concepts collection", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Module 2 Note 4", desc: "Practical case studies", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Module 2 Note 5", desc: "Quick revision material", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
+                ],
+                questions: [
+                    { title: "2017 Question Paper", desc: "Full question paper", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "2018 Question Paper", desc: "Full question paper", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "2019 Question Paper", desc: "Full question paper", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Important Questions", desc: "Most asked questions", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Practice Paper", desc: "Model question paper", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
+                ]
+            },
+            m3: {
+                notes: [
+                    { title: "Module 3 Note 1", desc: "Basic concepts and overview", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Module 3 Note 2", desc: "Detailed explanation", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Module 3 Note 3", desc: "Important principles", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Module 3 Note 4", desc: "Practical applications", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Module 3 Note 5", desc: "Quick revision", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
+                ],
+                questions: [
+                    { title: "2016 Question Paper", desc: "Full question paper", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "2017 Question Paper", desc: "Full question paper", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "2018 Question Paper", desc: "Full question paper", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Important Questions", desc: "Key questions", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Sample Paper", desc: "Practice questions", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
+                ]
+            },
+            m4: {
+                notes: [
+                    { title: "Module 4 Note 1", desc: "Basic concepts", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Module 4 Note 2", desc: "Detailed topics", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Module 4 Note 3", desc: "Important concepts", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Module 4 Note 4", desc: "Practical implementation", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Module 4 Note 5", desc: "Quick revision", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
+                ],
+                questions: [
+                    { title: "2015 Question Paper", desc: "Full question paper", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "2016 Question Paper", desc: "Full question paper", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "2017 Question Paper", desc: "Full question paper", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Important Questions", desc: "Key questions", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" },
+                    { title: "Test Paper", desc: "Practice questions", pdf: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf" }
+                ]
+            }
+        };
+
+        // Global PDF viewer functions
+        let pdfViewerFunctions = {
+            openPdf: null,
+            closeModal: null
+        };
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create cards for each module
+            createCards();
+            
+            // Set up PDF viewer functionality
+            const viewerFunctions = setupPdfViewer();
+            
+            // Store the functions globally
+            pdfViewerFunctions.openPdf = viewerFunctions.openPdf;
+            pdfViewerFunctions.closeModal = viewerFunctions.closeModal;
+            
+            // Set up scroll to top button
+            const scrollToTopBtn = document.getElementById('scrollToTop');
+            scrollToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Show/hide scroll to top button based on scroll position
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    scrollToTopBtn.style.display = 'flex';
+                } else {
+                    scrollToTopBtn.style.display = 'none';
+                }
+            });
+        });
+
+        // Create cards for each module
+        function createCards() {
+            for (const module in pdfData) {
+                // Notes cards
+                const notesContainer = document.getElementById(`${module}-notes`);
+                pdfData[module].notes.forEach((item, index) => {
+                    const card = createCard(item, module, 'notes', index);
+                    notesContainer.appendChild(card);
+                });
+                
+                // Questions cards
+                const questionsContainer = document.getElementById(`${module}-questions`);
+                pdfData[module].questions.forEach((item, index) => {
+                    const card = createCard(item, module, 'questions', index);
+                    questionsContainer.appendChild(card);
+                });
+            }
+        }
+
+        // Create a single card element
+        function createCard(item, module, type, index) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            card.innerHTML = `
+                <div class="card-img">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">${item.title}</h3>
+                    <p class="card-text">${item.desc}</p>
+                    <div class="card-footer">
+                        <button class="view-btn">View PDF</button>
+                    </div>
+                </div>
+            `;
+            
+            card.addEventListener('click', () => {
+                if (pdfViewerFunctions.openPdf) {
+                    pdfViewerFunctions.openPdf(item.pdf, item.title);
+                } else {
+                    console.error('PDF viewer functions not initialized');
+                }
+            });
+            
+            return card;
+        }
+
+        // Set up PDF viewer functionality
+        function setupPdfViewer() {
+            // DOM Elements
+            const modal = document.getElementById('pdfModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const pdfTitle = document.getElementById('pdfTitle');
+            const pdfContainer = document.getElementById('pdf-container');
+            const pageCount = document.getElementById('page-count');
+            const prevPageBtn = document.getElementById('prev-page');
+            const nextPageBtn = document.getElementById('next-page');
+            const zoomSelect = document.getElementById('zoom-select');
+            const pageInput = document.getElementById('page-input');
+            const goToPageBtn = document.getElementById('go-to-page');
+            const downloadBtn = document.getElementById('download-btn');
+            const loadingIndicator = document.getElementById('loading');
+            const viewerWrapper = document.getElementById('viewer-wrapper');
+            const scrollUpBtn = document.getElementById('scroll-up');
+            const scrollDownBtn = document.getElementById('scroll-down');
+            const highlightTools = document.getElementById('highlight-tools');
+            const highlightBtn = document.getElementById('highlight-btn');
+            const yellowMarker = document.getElementById('yellow-marker');
+            const greenMarker = document.getElementById('green-marker');
+            const pinkMarker = document.getElementById('pink-marker');
+            const blueMarker = document.getElementById('blue-marker');
+            const clearHighlightsBtn = document.getElementById('clear-highlights');
+            
+            // State variables
+            let currentPdf = null;
+            let currentPage = 1;
+            let totalPages = 1;
+            let zoomLevel = 1;
+            let pageElements = [];
+            let pageCanvases = [];
+            let currentPdfUrl = '';
+            let isHighlighting = false;
+            let currentMarkerClass = 'marker-yellow';
+            let startX, startY, endX, endY;
+            let currentHighlight = null;
+            let highlights = [];
+            
+            // Open PDF in viewer
+            function openPdf(pdfUrl, title) {
+                currentPdfUrl = pdfUrl;
+                currentPdf = null;
+                currentPage = 1;
+                totalPages = 1;
+                pageElements = [];
+                pageCanvases = [];
+                highlights = [];
+                
+                pdfTitle.textContent = title;
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                highlightTools.style.display = 'flex';
+                
+                // Initialize PDF viewer with multiple fallback methods
+                initPdfViewer(pdfUrl);
+            }
+            
+            // Close modal function
+            function closeModal() {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                highlightTools.style.display = 'none';
+            }
+            
+            // Initialize PDF viewer with multiple fallback methods
+            function initPdfViewer(pdfUrl) {
+                loadingIndicator.style.display = 'flex';
+                pdfContainer.innerHTML = '';
+                pageElements = [];
+                pageCanvases = [];
+                
+                // Try multiple methods to load the PDF
+                const loadingMethods = [
+                    // Method 1: Try direct loading first
+                    () => loadPdfDocument({
+                        url: pdfUrl,
+                        withCredentials: false
+                    }),
+                    
+                    // Method 2: Try with CORS proxy if direct loading fails
+                    () => {
+                        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(pdfUrl)}`;
+                        return loadPdfDocument({
+                            url: proxyUrl,
+                            httpHeaders: { 'Content-Type': 'application/pdf' }
+                        });
+                    },
+                    
+                    // Method 3: Try another CORS proxy
+                    () => {
+                        const proxyUrl = `https://cors-anywhere.herokuapp.com/${pdfUrl}`;
+                        return loadPdfDocument({
+                            url: proxyUrl,
+                            withCredentials: false
+                        });
+                    }
+                ];
+                
+                // Try each method sequentially
+                const tryLoadingMethods = async (methods) => {
+                    for (let i = 0; i < methods.length; i++) {
+                        try {
+                            loadingIndicator.innerHTML = `
+                                <div class="spinner"></div>
+                                <p>Loading document (Method ${i+1})...</p>
+                            `;
+                            const pdf = await methods[i]();
+                            return pdf;
+                        } catch (error) {
+                            console.log(`Method ${i+1} failed:`, error);
+                            if (i === methods.length - 1) throw error;
+                        }
+                    }
+                };
+                
+                tryLoadingMethods(loadingMethods)
+                    .then(function(pdf) {
+                        currentPdf = pdf;
+                        totalPages = pdf.numPages;
+                        updatePageCount(1);
+                        pageInput.max = totalPages;
+                        loadAllPages();
+                        loadingIndicator.style.display = 'none';
+                    })
+                    .catch(function(error) {
+                        console.error('All loading methods failed:', error);
+                        loadingIndicator.innerHTML = `
+                            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger-color);"></i>
+                            <p>Error loading PDF. Possible reasons:</p>
+                            <ul style="text-align: left; margin: 10px 0;">
+                                <li>The PDF URL is incorrect</li>
+                                <li>The server doesn't allow cross-origin requests</li>
+                                <li>The PDF is password protected</li>
+                            </ul>
+                            <p>Technical details: ${error.message}</p>
+                            <button onclick="window.location.reload()" style="margin-top: 15px; padding: 8px 15px; background: var(--primary-color); color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                Try Again
+                            </button>
+                        `;
+                    });
+            }
+            
+            // Helper function to load PDF document with options
+            function loadPdfDocument(options) {
+                const loadingTask = pdfjsLib.getDocument({
+                    ...options,
+                    disableAutoFetch: true,
+                    disableStream: true,
+                    cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.10.377/cmaps/',
+                    cMapPacked: true
+                });
+                return loadingTask.promise;
+            }
+            
+            // Load all pages with scroll
+            function loadAllPages() {
+                for (let i = 1; i <= totalPages; i++) {
+                    loadPage(i);
+                }
+            }
+            
+            // Load specific page
+            function loadPage(pageNum) {
+                currentPdf.getPage(pageNum).then(function(page) {
+                    const viewport = page.getViewport({ scale: zoomLevel });
+                    
+                    // Create page container
+                    const pageContainer = document.createElement('div');
+                    pageContainer.className = 'page-container';
+                    pageContainer.style.width = `${viewport.width}px`;
+                    pageContainer.style.height = `${viewport.height}px`;
+                    pageContainer.id = `page-${pageNum}`;
+                    
+                    // Create canvas for PDF rendering
+                    const canvas = document.createElement('canvas');
+                    canvas.className = 'pdf-page';
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    // Add elements to page container
+                    pageContainer.appendChild(canvas);
+                    
+                    // Add to main container
+                    pdfContainer.appendChild(pageContainer);
+                    
+                    // Store references
+                    pageElements[pageNum] = pageContainer;
+                    pageCanvases[pageNum] = canvas;
+                    
+                    // Render PDF page
+                    const renderContext = {
+                        canvasContext: canvas.getContext('2d'),
+                        viewport: viewport
+                    };
+                    
+                    page.render(renderContext).promise.then(function() {
+                        // Update page count if this is the first page
+                        if (pageNum === 1) {
+                            updatePageCount(1);
+                        }
+                    });
+                }).catch(function(error) {
+                    console.error('Error loading page:', error);
+                });
+            }
+            
+            // Update page count display
+            function updatePageCount(pageNum) {
+                currentPage = pageNum;
+                pageCount.textContent = `Page ${currentPage} of ${totalPages}`;
+                pageInput.value = currentPage;
+            }
+            
+            // Navigation controls
+            prevPageBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    scrollToPage(currentPage - 1);
+                }
+            });
+            
+            nextPageBtn.addEventListener('click', function() {
+                if (currentPage < totalPages) {
+                    scrollToPage(currentPage + 1);
+                }
+            });
+            
+            // Scroll to specific page
+            function scrollToPage(pageNum) {
+                const pageElement = document.getElementById(`page-${pageNum}`);
+                if (pageElement) {
+                    pageElement.scrollIntoView({ behavior: 'smooth' });
+                    updatePageCount(pageNum);
+                }
+            }
+            
+            // Zoom controls
+            zoomSelect.addEventListener('change', function() {
+                zoomLevel = parseFloat(this.value);
+                initPdfViewer(currentPdfUrl); // Re-render all pages with new zoom
+            });
+            
+            // Page jump
+            goToPageBtn.addEventListener('click', function() {
+                const page = parseInt(pageInput.value);
+                if (!isNaN(page) && page >= 1 && page <= totalPages) {
+                    scrollToPage(page);
+                }
+            });
+            
+            // Download PDF
+            downloadBtn.addEventListener('click', function() {
+                const link = document.createElement('a');
+                link.href = currentPdfUrl;
+                link.download = pdfTitle.textContent + '.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+            
+            // Track visible page during scroll
+            viewerWrapper.addEventListener('scroll', function() {
+                const scrollPosition = viewerWrapper.scrollTop + (viewerWrapper.clientHeight / 3);
+                
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageElement = document.getElementById(`page-${i}`);
+                    if (pageElement) {
+                        const pageTop = pageElement.offsetTop;
+                        const pageBottom = pageTop + pageElement.offsetHeight;
+                        
+                        if (scrollPosition >= pageTop && scrollPosition <= pageBottom) {
+                            if (currentPage !== i) {
+                                updatePageCount(i);
+                            }
+                            break;
+                        }
+                    }
+                }
+            });
+            
+            // Highlighting functionality
+            highlightBtn.addEventListener('click', function() {
+                isHighlighting = !isHighlighting;
+                highlightBtn.classList.toggle('active', isHighlighting);
+                
+                if (isHighlighting) {
+                    enableHighlighting();
+                } else {
+                    disableHighlighting();
+                }
+            });
+            
+            // Marker color selection
+            yellowMarker.addEventListener('click', function() {
+                currentMarkerClass = 'marker-yellow';
+                setActiveMarker(yellowMarker);
+            });
+            
+            greenMarker.addEventListener('click', function() {
+                currentMarkerClass = 'marker-green';
+                setActiveMarker(greenMarker);
+            });
+            
+            pinkMarker.addEventListener('click', function() {
+                currentMarkerClass = 'marker-pink';
+                setActiveMarker(pinkMarker);
+            });
+            
+            blueMarker.addEventListener('click', function() {
+                currentMarkerClass = 'marker-blue';
+                setActiveMarker(blueMarker);
+            });
+            
+            function setActiveMarker(markerElement) {
+                [yellowMarker, greenMarker, pinkMarker, blueMarker].forEach(m => {
+                    m.classList.remove('active');
+                });
+                markerElement.classList.add('active');
+            }
+            
+            // Clear all highlights
+            clearHighlightsBtn.addEventListener('click', function() {
+                highlights.forEach(highlight => {
+                    if (highlight.parentNode) {
+                        highlight.parentNode.removeChild(highlight);
+                    }
+                });
+                highlights = [];
+            });
+            
+            // Enable highlighting mode
+            function enableHighlighting() {
+                // Add event listeners for highlighting
+                pdfContainer.addEventListener('mousedown', startHighlight);
+                pdfContainer.addEventListener('mousemove', drawHighlight);
+                pdfContainer.addEventListener('mouseup', endHighlight);
+                pdfContainer.style.cursor = 'crosshair';
+            }
+            
+            // Disable highlighting mode
+            function disableHighlighting() {
+                // Remove event listeners for highlighting
+                pdfContainer.removeEventListener('mousedown', startHighlight);
+                pdfContainer.removeEventListener('mousemove', drawHighlight);
+                pdfContainer.removeEventListener('mouseup', endHighlight);
+                pdfContainer.style.cursor = 'auto';
+                
+                if (currentHighlight) {
+                    currentHighlight.style.display = 'none';
+                    currentHighlight = null;
+                }
+            }
+            
+            // Start highlighting
+            function startHighlight(e) {
+                if (!isHighlighting) return;
+                
+                const pageContainer = e.target.closest('.page-container');
+                if (!pageContainer) return;
+                
+                const rect = pageContainer.getBoundingClientRect();
+                startX = e.clientX - rect.left;
+                startY = e.clientY - rect.top;
+                
+                currentHighlight = document.createElement('div');
+                currentHighlight.className = `highlight ${currentMarkerClass}`;
+                currentHighlight.style.position = 'absolute';
+                currentHighlight.style.left = `${startX}px`;
+                currentHighlight.style.top = `${startY}px`;
+                currentHighlight.style.width = '0';
+                currentHighlight.style.height = '0';
+                
+                pageContainer.appendChild(currentHighlight);
+            }
+            
+            // Draw highlighting rectangle
+            function drawHighlight(e) {
+                if (!isHighlighting || !currentHighlight) return;
+                
+                const pageContainer = e.target.closest('.page-container');
+                if (!pageContainer) return;
+                
+                const rect = pageContainer.getBoundingClientRect();
+                endX = e.clientX - rect.left;
+                endY = e.clientY - rect.top;
+                
+                const width = endX - startX;
+                const height = endY - startY;
+                
+                currentHighlight.style.width = `${Math.abs(width)}px`;
+                currentHighlight.style.height = `${Math.abs(height)}px`;
+                
+                if (width < 0) {
+                    currentHighlight.style.left = `${endX}px`;
+                }
+                
+                if (height < 0) {
+                    currentHighlight.style.top = `${endY}px`;
+                }
+            }
+            
+            // End highlighting
+            function endHighlight(e) {
+                if (!isHighlighting || !currentHighlight) return;
+                
+                const pageContainer = e.target.closest('.page-container');
+                if (!pageContainer) return;
+                
+                // Make sure the highlight has some size
+                if (parseInt(currentHighlight.style.width) > 5 && parseInt(currentHighlight.style.height) > 5) {
+                    highlights.push(currentHighlight);
+                } else {
+                    pageContainer.removeChild(currentHighlight);
+                }
+                
+                currentHighlight = null;
+            }
+            
+            // Scroll controls
+            scrollUpBtn.addEventListener('click', function() {
+                viewerWrapper.scrollBy({ top: -200, behavior: 'smooth' });
+            });
+
+            scrollDownBtn.addEventListener('click', function() {
+                viewerWrapper.scrollBy({ top: 200, behavior: 'smooth' });
+            });
+            
+            // Close modal
+            closeModalBtn.addEventListener('click', closeModal);
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            // Security measures
+            document.addEventListener('contextmenu', function(e) {
+                if (e.target.closest('.viewer-wrapper')) {
+                    e.preventDefault();
+                }
+            });
+            
+            document.addEventListener('keydown', function(e) {
+                // Block Ctrl+S/Cmd+S
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                }
+            });
+            
+            // Disable dragging
+            viewerWrapper.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+            });
+            
+            // Return the functions that need to be accessible globally
+            return {
+                openPdf: openPdf,
+                closeModal: closeModal
+            };
+        }
+    </script>
+</body>
+</html>
