@@ -579,6 +579,7 @@
                 gap: 8px;
             }
             
+            
             nav ul li a {
                 padding: 6px 12px;
                 font-size: 0.9rem;
@@ -651,25 +652,38 @@
             }
         }
         
-        @media (max-width: 480px) {
-            .toolbar button, .toolbar select {
-                padding: 6px 10px;
-                font-size: 12px;
-            }
-            
-            .page-controls input {
-                width: 40px;
-                padding: 4px;
-            }
-            
-            .highlight-tools {
-                bottom: 70px;
-            }
-            
-            .highlight-tools button {
-                padding: 6px;
-            }
-        }
+      
+/* और छोटी स्क्रीन के लिए */
+@media (max-width: 480px) {
+     .module-section h2 {
+        font-size: 1.2rem; /* और छोटा */
+    }
+    /* बाकी कार्ड स्टाइल्स */
+    .card {
+        flex: 0 0 calc(50% - 5px);
+    }
+    .category h3 {
+        font-size: 1rem;
+    }
+    
+    .card-img {
+        height: 80px;
+        font-size: 30px;
+    }
+    
+    .card-title {
+        font-size: 0.8rem;
+    }
+    
+    .card-text {
+        font-size: 0.7rem;
+    }
+    
+    .view-btn {
+        padding: 3px 6px;
+        font-size: 0.65rem;
+    }
+}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
