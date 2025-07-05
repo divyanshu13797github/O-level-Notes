@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -374,19 +375,6 @@
             to { transform: rotate(360deg); }
         }
         
-       
-        
-       
-        
-        .page-nav button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
-        
-        .page-nav button:active {
-            transform: translateY(0);
-        }
-        
         .disable-selection {
             user-select: none;
             -webkit-user-select: none;
@@ -481,18 +469,18 @@
             font-size: 24px;
         }
 
-        /* Highlighting tools */
+        /* Highlighting tools - moved to bottom */
         .highlight-tools {
             position: fixed;
-            top: 100px;
-            right: 20px;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             padding: 10px;
             z-index: 101;
             display: flex;
-            flex-direction: column;
             gap: 8px;
         }
 
@@ -603,22 +591,13 @@
                 padding: 10px;
             }
             
-            .page-nav {
-                right: 10px;
-                bottom: 10px;
-            }
-            
-            .page-nav button {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
-
             .highlight-tools {
-                top: auto;
-                bottom: 80px;
-                right: 10px;
-                flex-direction: row;
+                bottom: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                flex-wrap: wrap;
+                justify-content: center;
+                max-width: 90%;
             }
             
             .close-btn {
@@ -787,7 +766,7 @@
             </div>
             
             
-            <!-- Highlighting Tools -->
+            <!-- Highlighting Tools - now at bottom -->
             <div class="highlight-tools" id="highlight-tools" style="display: none;">
                 <button id="highlight-btn" title="Highlight text" class="active">
                     <i class="fas fa-highlighter"></i>
@@ -992,8 +971,6 @@
             const downloadBtn = document.getElementById('download-btn');
             const loadingIndicator = document.getElementById('loading');
             const viewerWrapper = document.getElementById('viewer-wrapper');
-            const scrollUpBtn = document.getElementById('scroll-up');
-            const scrollDownBtn = document.getElementById('scroll-down');
             const highlightTools = document.getElementById('highlight-tools');
             const highlightBtn = document.getElementById('highlight-btn');
             const yellowMarker = document.getElementById('yellow-marker');
@@ -1403,15 +1380,6 @@
                 
                 currentHighlight = null;
             }
-            
-            // Scroll controls
-            scrollUpBtn.addEventListener('click', function() {
-                viewerWrapper.scrollBy({ top: -200, behavior: 'smooth' });
-            });
-
-            scrollDownBtn.addEventListener('click', function() {
-                viewerWrapper.scrollBy({ top: 200, behavior: 'smooth' });
-            });
             
             // Close modal
             closeModalBtn.addEventListener('click', closeModal);
