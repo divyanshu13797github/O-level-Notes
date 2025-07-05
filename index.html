@@ -374,31 +374,9 @@
             to { transform: rotate(360deg); }
         }
         
-        .page-nav {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 100;
-        }
+       
         
-        .page-nav button {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6e48aa, #9d50bb);
-            color: white;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-            font-size: 20px;
-        }
+       
         
         .page-nav button:hover {
             transform: translateY(-3px);
@@ -808,11 +786,7 @@
                 <div class="pdf-container" id="pdf-container"></div>
             </div>
             
-            <div class="page-nav">
-                <button id="scroll-up" title="Scroll up"><i class="fas fa-arrow-up"></i></button>
-                <button id="scroll-down" title="Scroll down"><i class="fas fa-arrow-down"></i></button>
-            </div>
-
+            
             <!-- Highlighting Tools -->
             <div class="highlight-tools" id="highlight-tools" style="display: none;">
                 <button id="highlight-btn" title="Highlight text" class="active">
