@@ -259,7 +259,6 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            touch-action: none;
         }
         
         .pdf-container {
@@ -267,7 +266,6 @@
             overflow: auto;
             position: relative;
             padding: 20px;
-            touch-action: none;
         }
         
         .page-container {
@@ -275,14 +273,12 @@
             position: relative;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
             background-color: white;
-            touch-action: none;
         }
         
         .pdf-page {
             display: block;
             margin: 0 auto;
             max-width: 100%;
-            touch-action: none;
         }
         
         .toolbar {
@@ -376,6 +372,41 @@
         
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+        
+        .page-nav {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .page-nav button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6e48aa, #9d50bb);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            font-size: 20px;
+        }
+        
+        .page-nav button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        
+        .page-nav button:active {
+            transform: translateY(0);
         }
         
         .disable-selection {
@@ -472,23 +503,22 @@
             font-size: 24px;
         }
 
-        /* Annotation tools */
-        .annotation-tools {
+        /* Highlighting tools */
+        .highlight-tools {
             position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 100px;
+            right: 20px;
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             padding: 10px;
             z-index: 101;
             display: flex;
+            flex-direction: column;
             gap: 8px;
-            align-items: center;
         }
 
-        .annotation-tools button {
+        .highlight-tools button {
             padding: 8px;
             border: none;
             border-radius: 4px;
@@ -497,22 +527,20 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
-            width: 40px;
-            height: 40px;
         }
 
-        .annotation-tools button:hover {
+        .highlight-tools button:hover {
             transform: scale(1.1);
         }
 
-        .annotation-tools button.active {
+        .highlight-tools button.active {
             box-shadow: 0 0 0 2px #6e48aa;
         }
 
         .highlight {
             position: absolute;
+            background-color: rgba(255, 255, 0, 0.4);
             z-index: 10;
-            pointer-events: none;
         }
 
         .marker-yellow {
@@ -529,38 +557,6 @@
 
         .marker-blue {
             background-color: rgba(0, 0, 255, 0.4);
-        }
-
-        .pen-drawing {
-            position: absolute;
-            background-color: transparent;
-            z-index: 11;
-            pointer-events: none;
-        }
-
-        .pen-line {
-            position: absolute;
-            background-color: #000;
-            transform-origin: 0 0;
-        }
-
-        /* Pen color options */
-        .pen-color-options {
-            display: flex;
-            gap: 5px;
-            margin-left: 10px;
-        }
-
-        .pen-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-
-        .pen-color.active {
-            border-color: #333;
         }
 
         /* Responsive styles */
@@ -629,15 +625,22 @@
                 padding: 10px;
             }
             
-            .annotation-tools {
+            .page-nav {
+                right: 10px;
                 bottom: 10px;
-                padding: 8px;
             }
             
-            .annotation-tools button {
-                width: 35px;
-                height: 35px;
-                padding: 6px;
+            .page-nav button {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .highlight-tools {
+                top: auto;
+                bottom: 80px;
+                right: 10px;
+                flex-direction: row;
             }
             
             .close-btn {
@@ -679,19 +682,6 @@
     .view-btn {
         padding: 3px 6px;
         font-size: 0.65rem;
-    }
-    
-    .annotation-tools {
-        bottom: 5px;
-        padding: 5px;
-        gap: 5px;
-    }
-    
-    .annotation-tools button {
-        width: 30px;
-        height: 30px;
-        padding: 4px;
-        font-size: 12px;
     }
 }
     </style>
@@ -817,19 +807,15 @@
                 </div>
                 <div class="pdf-container" id="pdf-container"></div>
             </div>
+            
+            <div class="page-nav">
+                <button id="scroll-up" title="Scroll up"><i class="fas fa-arrow-up"></i></button>
+                <button id="scroll-down" title="Scroll down"><i class="fas fa-arrow-down"></i></button>
+            </div>
 
-            <!-- Annotation Tools -->
-            <div class="annotation-tools" id="annotation-tools" style="display: none;">
-                <button id="pen-btn" title="Pen tool">
-                    <i class="fas fa-pen"></i>
-                </button>
-                <div class="pen-color-options" id="pen-color-options">
-                    <div class="pen-color active" style="background-color: #000000;" data-color="#000000"></div>
-                    <div class="pen-color" style="background-color: #ff0000;" data-color="#ff0000"></div>
-                    <div class="pen-color" style="background-color: #0000ff;" data-color="#0000ff"></div>
-                    <div class="pen-color" style="background-color: #00aa00;" data-color="#00aa00"></div>
-                </div>
-                <button id="highlight-btn" title="Highlight tool">
+            <!-- Highlighting Tools -->
+            <div class="highlight-tools" id="highlight-tools" style="display: none;">
+                <button id="highlight-btn" title="Highlight text" class="active">
                     <i class="fas fa-highlighter"></i>
                 </button>
                 <button id="yellow-marker" title="Yellow highlighter" class="marker-yellow">
@@ -844,7 +830,7 @@
                 <button id="blue-marker" title="Blue highlighter" class="marker-blue">
                     <i class="fas fa-highlighter" style="color: dodgerblue"></i>
                 </button>
-                <button id="clear-annotations" title="Clear all annotations">
+                <button id="clear-highlights" title="Clear all highlights">
                     <i class="fas fa-trash-alt"></i>
                 </button>
             </div>
@@ -1032,16 +1018,15 @@
             const downloadBtn = document.getElementById('download-btn');
             const loadingIndicator = document.getElementById('loading');
             const viewerWrapper = document.getElementById('viewer-wrapper');
-            const annotationTools = document.getElementById('annotation-tools');
-            const penBtn = document.getElementById('pen-btn');
+            const scrollUpBtn = document.getElementById('scroll-up');
+            const scrollDownBtn = document.getElementById('scroll-down');
+            const highlightTools = document.getElementById('highlight-tools');
             const highlightBtn = document.getElementById('highlight-btn');
             const yellowMarker = document.getElementById('yellow-marker');
             const greenMarker = document.getElementById('green-marker');
             const pinkMarker = document.getElementById('pink-marker');
             const blueMarker = document.getElementById('blue-marker');
-            const clearAnnotationsBtn = document.getElementById('clear-annotations');
-            const penColorOptions = document.getElementById('pen-color-options');
-            const penColors = penColorOptions.querySelectorAll('.pen-color');
+            const clearHighlightsBtn = document.getElementById('clear-highlights');
             
             // State variables
             let currentPdf = null;
@@ -1052,18 +1037,10 @@
             let pageCanvases = [];
             let currentPdfUrl = '';
             let isHighlighting = false;
-            let isPenActive = false;
             let currentMarkerClass = 'marker-yellow';
-            let currentPenColor = '#000000';
             let startX, startY, endX, endY;
             let currentHighlight = null;
-            let currentDrawing = null;
-            let currentLine = null;
-            let isDrawing = false;
             let highlights = [];
-            let drawings = [];
-            let initialDistance = null;
-            let initialZoom = 1;
             
             // Open PDF in viewer
             function openPdf(pdfUrl, title) {
@@ -1074,12 +1051,11 @@
                 pageElements = [];
                 pageCanvases = [];
                 highlights = [];
-                drawings = [];
                 
                 pdfTitle.textContent = title;
                 modal.style.display = 'block';
                 document.body.style.overflow = 'hidden';
-                annotationTools.style.display = 'flex';
+                highlightTools.style.display = 'flex';
                 
                 // Adjust zoom level for mobile
                 if (window.innerWidth <= 768) {
@@ -1098,9 +1074,7 @@
             function closeModal() {
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
-                annotationTools.style.display = 'none';
-                disableHighlighting();
-                disablePen();
+                highlightTools.style.display = 'none';
             }
             
             // Initialize PDF viewer with multiple fallback methods
@@ -1318,35 +1292,13 @@
                 }
             });
             
-            // Pen color selection
-            penColors.forEach(color => {
-                color.addEventListener('click', function() {
-                    penColors.forEach(c => c.classList.remove('active'));
-                    this.classList.add('active');
-                    currentPenColor = this.getAttribute('data-color');
-                });
-            });
-            
-            // Annotation tools functionality
-            penBtn.addEventListener('click', function() {
-                isPenActive = !isPenActive;
-                penBtn.classList.toggle('active', isPenActive);
-                
-                if (isPenActive) {
-                    enablePen();
-                    disableHighlighting();
-                } else {
-                    disablePen();
-                }
-            });
-            
+            // Highlighting functionality
             highlightBtn.addEventListener('click', function() {
                 isHighlighting = !isHighlighting;
                 highlightBtn.classList.toggle('active', isHighlighting);
                 
                 if (isHighlighting) {
                     enableHighlighting();
-                    disablePen();
                 } else {
                     disableHighlighting();
                 }
@@ -1380,41 +1332,22 @@
                 markerElement.classList.add('active');
             }
             
-            // Clear all annotations
-            clearAnnotationsBtn.addEventListener('click', function() {
-                // Clear highlights
+            // Clear all highlights
+            clearHighlightsBtn.addEventListener('click', function() {
                 highlights.forEach(highlight => {
                     if (highlight.parentNode) {
                         highlight.parentNode.removeChild(highlight);
                     }
                 });
                 highlights = [];
-                
-                // Clear drawings
-                drawings.forEach(drawing => {
-                    if (drawing.parentNode) {
-                        drawing.parentNode.removeChild(drawing);
-                    }
-                });
-                drawings = [];
             });
             
             // Enable highlighting mode
             function enableHighlighting() {
-                // Remove pen event listeners if any
-                disablePen();
-                
                 // Add event listeners for highlighting
                 pdfContainer.addEventListener('mousedown', startHighlight);
                 pdfContainer.addEventListener('mousemove', drawHighlight);
                 pdfContainer.addEventListener('mouseup', endHighlight);
-                pdfContainer.addEventListener('mouseleave', endHighlight);
-                
-                // Touch events for mobile
-                pdfContainer.addEventListener('touchstart', handleTouchStartHighlight);
-                pdfContainer.addEventListener('touchmove', handleTouchMoveHighlight);
-                pdfContainer.addEventListener('touchend', handleTouchEndHighlight);
-                
                 pdfContainer.style.cursor = 'crosshair';
             }
             
@@ -1424,22 +1357,12 @@
                 pdfContainer.removeEventListener('mousedown', startHighlight);
                 pdfContainer.removeEventListener('mousemove', drawHighlight);
                 pdfContainer.removeEventListener('mouseup', endHighlight);
-                pdfContainer.removeEventListener('mouseleave', endHighlight);
-                
-                // Remove touch events
-                pdfContainer.removeEventListener('touchstart', handleTouchStartHighlight);
-                pdfContainer.removeEventListener('touchmove', handleTouchMoveHighlight);
-                pdfContainer.removeEventListener('touchend', handleTouchEndHighlight);
+                pdfContainer.style.cursor = 'auto';
                 
                 if (currentHighlight) {
-                    if (currentHighlight.parentNode) {
-                        currentHighlight.parentNode.removeChild(currentHighlight);
-                    }
+                    currentHighlight.style.display = 'none';
                     currentHighlight = null;
                 }
-                
-                highlightBtn.classList.remove('active');
-                isHighlighting = false;
             }
             
             // Start highlighting
@@ -1460,7 +1383,6 @@
                 currentHighlight.style.top = `${startY}px`;
                 currentHighlight.style.width = '0';
                 currentHighlight.style.height = '0';
-                currentHighlight.style.pointerEvents = 'none';
                 
                 pageContainer.appendChild(currentHighlight);
             }
@@ -1502,268 +1424,20 @@
                 if (parseInt(currentHighlight.style.width) > 5 && parseInt(currentHighlight.style.height) > 5) {
                     highlights.push(currentHighlight);
                 } else {
-                    if (currentHighlight.parentNode) {
-                        pageContainer.removeChild(currentHighlight);
-                    }
+                    pageContainer.removeChild(currentHighlight);
                 }
                 
                 currentHighlight = null;
             }
             
-            // Touch event handlers for highlighting
-            function handleTouchStartHighlight(e) {
-                if (!isHighlighting) return;
-                e.preventDefault();
-                
-                const touch = e.touches[0];
-                const mouseEvent = new MouseEvent('mousedown', {
-                    clientX: touch.clientX,
-                    clientY: touch.clientY
-                });
-                touch.target.dispatchEvent(mouseEvent);
-            }
-            
-            function handleTouchMoveHighlight(e) {
-                if (!isHighlighting) return;
-                e.preventDefault();
-                
-                const touch = e.touches[0];
-                const mouseEvent = new MouseEvent('mousemove', {
-                    clientX: touch.clientX,
-                    clientY: touch.clientY
-                });
-                touch.target.dispatchEvent(mouseEvent);
-            }
-            
-            function handleTouchEndHighlight(e) {
-                if (!isHighlighting) return;
-                e.preventDefault();
-                
-                const touch = e.changedTouches[0];
-                const mouseEvent = new MouseEvent('mouseup', {
-                    clientX: touch.clientX,
-                    clientY: touch.clientY
-                });
-                touch.target.dispatchEvent(mouseEvent);
-            }
-            
-            // Enable pen mode
-            function enablePen() {
-                // Remove highlight event listeners if any
-                disableHighlighting();
-                
-                // Add event listeners for pen drawing
-                pdfContainer.addEventListener('mousedown', startDrawing);
-                pdfContainer.addEventListener('mousemove', drawLine);
-                pdfContainer.addEventListener('mouseup', endDrawing);
-                pdfContainer.addEventListener('mouseleave', endDrawing);
-                
-                // Touch events for mobile
-                pdfContainer.addEventListener('touchstart', handleTouchStartPen);
-                pdfContainer.addEventListener('touchmove', handleTouchMovePen);
-                pdfContainer.addEventListener('touchend', handleTouchEndPen);
-                
-                pdfContainer.style.cursor = 'crosshair';
-            }
-            
-            // Disable pen mode
-            function disablePen() {
-                // Remove event listeners for pen drawing
-                pdfContainer.removeEventListener('mousedown', startDrawing);
-                pdfContainer.removeEventListener('mousemove', drawLine);
-                pdfContainer.removeEventListener('mouseup', endDrawing);
-                pdfContainer.removeEventListener('mouseleave', endDrawing);
-                
-                // Remove touch events
-                pdfContainer.removeEventListener('touchstart', handleTouchStartPen);
-                pdfContainer.removeEventListener('touchmove', handleTouchMovePen);
-                pdfContainer.removeEventListener('touchend', handleTouchEndPen);
-                
-                if (currentDrawing) {
-                    currentDrawing.style.display = 'none';
-                    currentDrawing = null;
-                }
-                
-                penBtn.classList.remove('active');
-                isPenActive = false;
-            }
-            
-            // Start drawing with pen
-            function startDrawing(e) {
-                if (!isPenActive) return;
-                
-                const pageContainer = e.target.closest('.page-container');
-                if (!pageContainer) return;
-                
-                const rect = pageContainer.getBoundingClientRect();
-                startX = e.clientX - rect.left;
-                startY = e.clientY - rect.top;
-                
-                // Create drawing container if it doesn't exist
-                if (!currentDrawing) {
-                    currentDrawing = document.createElement('div');
-                    currentDrawing.className = 'pen-drawing';
-                    currentDrawing.style.position = 'absolute';
-                    currentDrawing.style.left = '0';
-                    currentDrawing.style.top = '0';
-                    currentDrawing.style.width = '100%';
-                    currentDrawing.style.height = '100%';
-                    currentDrawing.style.pointerEvents = 'none';
-                    
-                    pageContainer.appendChild(currentDrawing);
-                }
-                
-                // Create a new line
-                currentLine = document.createElement('div');
-                currentLine.className = 'pen-line';
-                currentLine.style.position = 'absolute';
-                currentLine.style.left = `${startX}px`;
-                currentLine.style.top = `${startY}px`;
-                currentLine.style.width = '0';
-                currentLine.style.height = '2px';
-                currentLine.style.backgroundColor = currentPenColor;
-                currentLine.style.transformOrigin = '0 0';
-                
-                currentDrawing.appendChild(currentLine);
-                isDrawing = true;
-            }
-            
-            // Draw line with pen
-            function drawLine(e) {
-                if (!isPenActive || !isDrawing || !currentLine) return;
-                
-                const pageContainer = e.target.closest('.page-container');
-                if (!pageContainer) return;
-                
-                const rect = pageContainer.getBoundingClientRect();
-                endX = e.clientX - rect.left;
-                endY = e.clientY - rect.top;
-                
-                // Calculate line length and angle
-                const dx = endX - startX;
-                const dy = endY - startY;
-                const length = Math.sqrt(dx * dx + dy * dy);
-                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-                
-                // Update line style
-                currentLine.style.width = `${length}px`;
-                currentLine.style.transform = `rotate(${angle}deg)`;
-                
-                // Create a new line segment if the mouse moves far enough
-                if (length > 20) {
-                    startX = endX;
-                    startY = endY;
-                    
-                    const newLine = document.createElement('div');
-                    newLine.className = 'pen-line';
-                    newLine.style.position = 'absolute';
-                    newLine.style.left = `${startX}px`;
-                    newLine.style.top = `${startY}px`;
-                    newLine.style.width = '0';
-                    newLine.style.height = '2px';
-                    newLine.style.backgroundColor = currentPenColor;
-                    newLine.style.transformOrigin = '0 0';
-                    
-                    currentDrawing.appendChild(newLine);
-                    currentLine = newLine;
-                }
-            }
-            
-            // End drawing with pen
-            function endDrawing(e) {
-                if (!isPenActive || !isDrawing) return;
-                
-                if (currentDrawing) {
-                    drawings.push(currentDrawing);
-                }
-                
-                isDrawing = false;
-                currentLine = null;
-            }
-            
-            // Touch event handlers for pen
-            function handleTouchStartPen(e) {
-                if (!isPenActive) return;
-                e.preventDefault();
-                
-                const touch = e.touches[0];
-                const mouseEvent = new MouseEvent('mousedown', {
-                    clientX: touch.clientX,
-                    clientY: touch.clientY
-                });
-                touch.target.dispatchEvent(mouseEvent);
-            }
-            
-            function handleTouchMovePen(e) {
-                if (!isPenActive) return;
-                e.preventDefault();
-                
-                const touch = e.touches[0];
-                const mouseEvent = new MouseEvent('mousemove', {
-                    clientX: touch.clientX,
-                    clientY: touch.clientY
-                });
-                touch.target.dispatchEvent(mouseEvent);
-            }
-            
-            function handleTouchEndPen(e) {
-                if (!isPenActive) return;
-                e.preventDefault();
-                
-                const touch = e.changedTouches[0];
-                const mouseEvent = new MouseEvent('mouseup', {
-                    clientX: touch.clientX,
-                    clientY: touch.clientY
-                });
-                touch.target.dispatchEvent(mouseEvent);
-            }
-            
-            // Pinch-to-zoom functionality
-            function handleTouchStartZoom(e) {
-                if (e.touches.length === 2) {
-                    e.preventDefault();
-                    const touch1 = e.touches[0];
-                    const touch2 = e.touches[1];
-                    initialDistance = Math.hypot(
-                        touch2.clientX - touch1.clientX,
-                        touch2.clientY - touch1.clientY
-                    );
-                    initialZoom = zoomLevel;
-                }
-            }
-            
-            function handleTouchMoveZoom(e) {
-                if (e.touches.length === 2) {
-                    e.preventDefault();
-                    const touch1 = e.touches[0];
-                    const touch2 = e.touches[1];
-                    const currentDistance = Math.hypot(
-                        touch2.clientX - touch1.clientX,
-                        touch2.clientY - touch1.clientY
-                    );
-                    
-                    if (initialDistance) {
-                        const scale = currentDistance / initialDistance;
-                        const newZoom = initialZoom * scale;
-                        
-                        // Limit zoom levels
-                        if (newZoom >= 0.5 && newZoom <= 2) {
-                            zoomLevel = newZoom;
-                            zoomSelect.value = zoomLevel.toFixed(2);
-                            initPdfViewer(currentPdfUrl);
-                        }
-                    }
-                }
-            }
-            
-            function handleTouchEndZoom() {
-                initialDistance = null;
-            }
-            
-            // Add pinch-to-zoom event listeners
-            viewerWrapper.addEventListener('touchstart', handleTouchStartZoom, { passive: false });
-            viewerWrapper.addEventListener('touchmove', handleTouchMoveZoom, { passive: false });
-            viewerWrapper.addEventListener('touchend', handleTouchEndZoom, { passive: false });
+            // Scroll controls
+            scrollUpBtn.addEventListener('click', function() {
+                viewerWrapper.scrollBy({ top: -200, behavior: 'smooth' });
+            });
+
+            scrollDownBtn.addEventListener('click', function() {
+                viewerWrapper.scrollBy({ top: 200, behavior: 'smooth' });
+            });
             
             // Close modal
             closeModalBtn.addEventListener('click', closeModal);
@@ -1793,6 +1467,41 @@
             viewerWrapper.addEventListener('dragstart', function(e) {
                 e.preventDefault();
             });
+            
+            // Handle mobile touch events
+            document.addEventListener('touchstart', function(e) {
+                if (isHighlighting && e.target.closest('.page-container')) {
+                    const touch = e.touches[0];
+                    const mouseEvent = new MouseEvent('mousedown', {
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+                    touch.target.dispatchEvent(mouseEvent);
+                }
+            }, { passive: true });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (isHighlighting && e.target.closest('.page-container')) {
+                    const touch = e.touches[0];
+                    const mouseEvent = new MouseEvent('mousemove', {
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+                    touch.target.dispatchEvent(mouseEvent);
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            document.addEventListener('touchend', function(e) {
+                if (isHighlighting && e.target.closest('.page-container')) {
+                    const touch = e.changedTouches[0];
+                    const mouseEvent = new MouseEvent('mouseup', {
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+                    touch.target.dispatchEvent(mouseEvent);
+                }
+            }, { passive: true });
             
             // Return the functions that need to be accessible globally
             return {
